@@ -3,13 +3,8 @@ const router = express.Router();
 const { requireAuth } = require('../middleware/auth.middleware');
 const profileController = require('../controllers/profile.controller');
 
-// Admin/test route: reset alle openstaande reserveringen
-// This route is an administrative / test helper that resets all rentals to returned.
-// It is potentially dangerous and should NOT be exposed in production. Register
-// it only when the environment variable ENABLE_RENTAL_RESET is set to 'true'.
-if (process.env.ENABLE_RENTAL_RESET === 'true') {
-	router.post('/rentals/reset', requireAuth, profileController.resetAllRentals);
-}
+// NOTE: reset-all-rentals helper removed for safety. If you need a one-off
+// data migration or reset, run a dedicated script with proper safeguards.
 
 // Film inleveren (return)
 router.post('/rentals/:filmId/return', requireAuth, profileController.returnRental);

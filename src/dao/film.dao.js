@@ -109,17 +109,8 @@ const filmDao = {
         return callback(null, result.insertId);
       }
     );
-  }
-  , resetAllRentals: (callback) => {
-    database.query(
-      `UPDATE rental SET return_date = NOW() WHERE return_date IS NULL`,
-      (err, result) => {
-        if (err) return callback(err);
-        return callback(null, result);
-      }
-    );
-  }
-  , returnRental: (customerId, filmId, callback) => {
+  },
+  returnRental: (customerId, filmId, callback) => {
     database.query(
       `UPDATE rental r
        JOIN inventory i ON r.inventory_id = i.inventory_id
