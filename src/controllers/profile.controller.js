@@ -2,16 +2,8 @@ const filmService = require('../services/film.service');
 const usersService = require('../services/users.service');
 
 const profileController = {
-  resetAllRentals: (req, res) => {
-    filmService.resetAllRentals((err) => {
-      if (err) {
-        req.flash('error', 'Reset mislukt.');
-      } else {
-        req.flash('success', 'Alle reserveringen zijn gereset!');
-      }
-      res.redirect('/profile/rentals');
-    });
-  },
+  // resetAllRentals removed for safety. If you need to run a reset, execute a
+  // dedicated offline script that requires manual approval and proper backup.
 
   returnRental: (req, res) => {
     const userId = req.user.userId;

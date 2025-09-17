@@ -36,9 +36,6 @@ const filmService = {
       });
     });
   }
-  , resetAllRentals: (callback) => {
-    filmDao.resetAllRentals(callback);
-  }
   , returnRental: (customerId, filmId, callback) => {
     filmDao.returnRental(customerId, filmId, callback);
   }
