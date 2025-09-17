@@ -19,7 +19,7 @@ const usersDao = {
           [userId],
           (err1) => {
             if (err1) {
-              console.log('DELETE payment error:', err1);
+              console.error('DELETE payment error:', err1);
               return callback(err1);
             }
             database.query(
@@ -27,7 +27,7 @@ const usersDao = {
               [userId],
               (err2) => {
                 if (err2) {
-                  console.log('DELETE rental error:', err2);
+                  console.error('DELETE rental error:', err2);
                   return callback(err2);
                 }
                 database.query(
@@ -35,10 +35,10 @@ const usersDao = {
                   [userId],
                   (error, delResults) => {
                     if (error) {
-                      console.log('DELETE customer error:', error);
+                      console.error('DELETE customer error:', error);
                       return callback(error);
                     }
-                    console.log('DELETE customer resultaat:', delResults);
+                    console.error('DELETE customer resultaat:', delResults);
                     callback(null, delResults);
                   }
                 );

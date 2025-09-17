@@ -12,7 +12,7 @@ const filmDao = {
        ORDER BY film.title ASC;`,
       (error, results) => {
         if (error) {
-          console.log("Error in film.dao.js getAll:", error);
+          console.error("Error in film.dao.js getAll:", error);
           return callback(error, undefined);
         }
         return callback(undefined, results);
@@ -31,7 +31,7 @@ const filmDao = {
       [filmId],
       (error, results) => {
         if (error) {
-          console.log("Error in film.dao.js getById:", error);
+          console.error("Error in film.dao.js getById:", error);
           return callback(error, undefined);
         }
         const film = results[0];
@@ -52,7 +52,7 @@ const filmDao = {
 
         database.query(availabilityQuery, [filmId], (err2, availResults) => {
           if (err2) {
-            console.log('Error availability query:', err2);
+               console.error('Error availability query:', err2);
             return callback(err2, undefined);
           }
           // Map availability by store id
@@ -81,10 +81,54 @@ const filmDao = {
       [userId],
       (error, results) => {
         if (error) {
-          console.log("Error in film.dao.js getRentedByUser:", error);
+          console.error("Error in film.dao.js getRentedByUser:", error);
           return callback(error, undefined);
         }
         return callback(undefined, results);
+      }
+    );
+  }
+
+  , findAvailableInventory: (filmId, storeId, callback) => {
+    const inventoryQuery = storeId ?
+      `SELECT inventory_id FROM inventory WHERE film_id = ? AND store_id = ? AND inventory_id NOT IN (SELECT inventory_id FROM rental WHERE return_date IS NULL) LIMIT 1` :
+      `SELECT inventory_id FROM inventory WHERE film_id = ? AND inventory_id NOT IN (SELECT inventory_id FROM rental WHERE return_date IS NULL) LIMIT 1`;
+    const params = storeId ? [filmId, storeId] : [filmId];
+    database.query(inventoryQuery, params, (err, results) => {
+      if (err) return callback(err);
+      return callback(null, results);
+    });
+  },
+
+  createRental: (inventoryId, customerId, callback) => {
+    database.query(
+      `INSERT INTO rental (rental_date, inventory_id, customer_id, return_date, staff_id) VALUES (NOW(), ?, ?, NULL, 1)`,
+      [inventoryId, customerId],
+      (err, result) => {
+        if (err) return callback(err);
+        return callback(null, result.insertId);
+      }
+    );
+  }
+  , resetAllRentals: (callback) => {
+    database.query(
+      `UPDATE rental SET return_date = NOW() WHERE return_date IS NULL`,
+      (err, result) => {
+        if (err) return callback(err);
+        return callback(null, result);
+      }
+    );
+  }
+  , returnRental: (customerId, filmId, callback) => {
+    database.query(
+      `UPDATE rental r
+       JOIN inventory i ON r.inventory_id = i.inventory_id
+       SET r.return_date = NOW()
+       WHERE r.customer_id = ? AND i.film_id = ? AND r.return_date IS NULL`,
+      [customerId, filmId],
+      (err, result) => {
+        if (err) return callback(err);
+        return callback(null, result);
       }
     );
   }

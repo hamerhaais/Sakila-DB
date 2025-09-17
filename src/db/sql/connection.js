@@ -14,7 +14,7 @@ database.connect((err) => {
     console.error('Database connection failed:', err.stack);
     return;
   }
-  console.log('Verbonden met database als id', database.threadId);
+  // Verbonden met database
 });
 
 module.exports = database;

@@ -121,8 +121,7 @@ app.use(function(err, req, res, next) {
 // --- NIEUW GEDEELTE: START DE SERVER ---
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
-  console.log(`Server draait en luistert op poort ${port}`);
-  console.log(`Ga naar http://localhost:${port} om de app te zien.`);
+  // Server gestart
 });
 // --- EINDE NIEUW GEDEELTE ---
 
