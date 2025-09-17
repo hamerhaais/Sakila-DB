@@ -1,0 +1,52 @@
+extends ../layout
+
+block content
+  .container.mt-4
+    nav(aria-label="breadcrumb")
+      ol.breadcrumb
+        li.breadcrumb-item
+          a(href="/") Home
+        li.breadcrumb-item
+          a(href="/films") Films
+        li.breadcrumb-item.active(aria-current="page")= film.title
+        
+    .card
+      .card-header
+        h2 Film Details
+      .card-body
+        h3.card-title= film.title
+        p.card-text 
+          strong Beschrijving: 
+          | #{film.description}
+        if film.rating
+          p
+            strong Rating: 
+            | #{film.rating}
+        ul.list-group.list-group-flush
+          li.list-group-item 
+            strong Jaar: 
+            | #{film.release_year}
+          li.list-group-item 
+            strong Taal: 
+            | #{film.language}
+          li.list-group-item 
+            strong Lengte: 
+            | #{film.length} minuten
+          if film.availability
+            each val, storeId in film.availability
+              li.list-group-item
+                - var friendly = (typeof storeMap !== 'undefined' && storeMap[storeId]) ? storeMap[storeId] : `Winkel ${storeId}`
+                strong= friendly + ':'
+                |  Beschikbaar: #{val.available} / #{val.total}
+      .card-footer
+        a.btn.btn-secondary.me-2(href='/films') Terug naar overzicht
+        if user
+          form(method="POST" action=`/films/${film.film_id}/rent` style="display:inline;")
+            if film.availability
+              .mb-2
+                label.form-label(for="store_id") Kies winkel
+                select.form-select(name="store_id" id="store_id")
+                  each val, storeId in film.availability
+                    - var label = (typeof storeMap !== 'undefined' && storeMap[storeId]) ? `${storeMap[storeId]} (${val.available} beschikbaar)` : `Winkel ${storeId} (${val.available} beschikbaar)`
+                    option(value=storeId)= label
+            button.btn.btn-success(type="submit") Reserveer deze film
