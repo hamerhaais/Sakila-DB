@@ -2,8 +2,6 @@ const filmService = require('../services/film.service');
 const usersService = require('../services/users.service');
 
 const profileController = {
-  // resetAllRentals removed for safety. If you need to run a reset, execute a
-  // dedicated offline script that requires manual approval and proper backup.
 
   returnRental: (req, res) => {
     const userId = req.user.userId;
@@ -66,27 +64,15 @@ const profileController = {
   },
 
   updateProfile: (req, res) => {
-    const { first_name, last_name, email, password } = req.body;
+    const { first_name, last_name, email } = req.body;
     const userId = req.user.userId;
     usersService.update(userId, first_name, last_name, email, 1, (err) => {
       if (err) {
         req.flash('error', 'Profiel bijwerken mislukt.');
         return res.redirect('/profile/edit');
       }
-      if (password && password.length > 0) {
-        // delegate hashing to usersService.updatePassword (accepts plaintext)
-        usersService.updatePassword(userId, password, (err) => {
-          if (err) {
-            req.flash('error', 'Wachtwoord wijzigen mislukt.');
-            return res.redirect('/profile/edit');
-          }
-          req.flash('success', 'Profiel en wachtwoord succesvol bijgewerkt!');
-          res.redirect('/profile/edit');
-        });
-      } else {
-        req.flash('success', 'Profiel succesvol bijgewerkt!');
-        res.redirect('/profile/edit');
-      }
+      req.flash('success', 'Profiel succesvol bijgewerkt!');
+      res.redirect('/profile/edit');
     });
   }
 };

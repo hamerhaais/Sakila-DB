@@ -2,6 +2,7 @@
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
+const logger = require('./src/util/logger');
 
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
@@ -111,7 +112,7 @@ app.use(function(req, res, next) {
 
 // Custom 500 handler
 app.use(function(err, req, res, next) {
-  console.error('Express error:', err); // <-- logt ALLES
+  logger.error('Express error:', err); // <-- logt ALLES
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
   res.status(err.status || 500);

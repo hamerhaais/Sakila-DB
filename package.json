@@ -4,7 +4,10 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon app.js"
+    "start": "nodemon app.js",
+    "cy:run": "start-server-and-test start http://localhost:3000 cypress:run",
+    "cypress:run": "cypress run",
+    "cypress:open": "cypress open"
   },
   "keywords": [],
   "author": "",
@@ -25,6 +28,8 @@
   },
   "devDependencies": {
     "chai": "^6.0.1",
-    "mocha": "^11.7.2"
+    "cypress": "^15.2.0",
+    "mocha": "^11.7.2",
+    "start-server-and-test": "^1.14.0"
   }
 }
