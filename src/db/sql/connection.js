@@ -1,5 +1,6 @@
 const mysql = require('mysql2');
 require('dotenv').config();
+const logger = require('../../util/logger');
 
 const database = mysql.createConnection({
   host: process.env.DB_HOST,
@@ -11,7 +12,7 @@ const database = mysql.createConnection({
 
 database.connect((err) => {
   if (err) {
-    console.error('Database connection failed:', err.stack);
+    logger.error('Database connection failed:', err.stack);
     return;
   }
   // Verbonden met database

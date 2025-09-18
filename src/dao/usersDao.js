@@ -1,4 +1,5 @@
 const database = require("../db/sql/connection");
+const logger = require('../util/logger');
 
 const usersDao = {
   // Verwijder een gebruiker alleen als er geen openstaande boekingen zijn
@@ -19,7 +20,7 @@ const usersDao = {
           [userId],
           (err1) => {
             if (err1) {
-              console.error('DELETE payment error:', err1);
+              logger.error('DELETE payment error:', err1);
               return callback(err1);
             }
             database.query(
@@ -27,7 +28,7 @@ const usersDao = {
               [userId],
               (err2) => {
                 if (err2) {
-                  console.error('DELETE rental error:', err2);
+                  logger.error('DELETE rental error:', err2);
                   return callback(err2);
                 }
                 database.query(
@@ -35,10 +36,12 @@ const usersDao = {
                   [userId],
                   (error, delResults) => {
                     if (error) {
-                      console.error('DELETE customer error:', error);
+                      const logger = require('../util/logger');
+                      logger.error('DELETE customer error:', error);
                       return callback(error);
                     }
-                    console.error('DELETE customer resultaat:', delResults);
+                    const logger = require('../util/logger');
+                    logger.info('DELETE customer resultaat:', delResults);
                     callback(null, delResults);
                   }
                 );
@@ -115,17 +118,6 @@ const usersDao = {
     );
   },
 
-  // Wachtwoord wijzigen
-  updatePassword: (userId, password, callback) => {
-    database.query(
-      `UPDATE customer SET password = ? WHERE customer_id = ?`,
-      [password, userId],
-      (error, results) => {
-        if (error) return callback(error);
-        callback(null);
-      }
-    );
-  }
 };
 
 module.exports = usersDao;

@@ -17,9 +17,7 @@ block content
         .mb-3
           label(for="email") Emailadres
           input.form-control(type="email" name="email" id="email" required value=user.email)
-        .mb-3
-          label(for="password") Nieuw wachtwoord
-          input.form-control(type="password" name="password" id="password" placeholder="Laat leeg om niet te wijzigen")
+        // password change removed: password management is disabled in the UI
         button.btn.btn-primary(type="submit") Opslaan
     else
       p Je bent niet ingelogd.

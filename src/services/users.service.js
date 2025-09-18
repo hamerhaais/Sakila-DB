@@ -13,13 +13,6 @@ const usersService = {
   },
   getById: (id, cb) => usersDao.getById(id, cb),
   delete: (id, cb) => usersDao.delete(id, cb),
-  // updatePassword now accepts plaintext password and hashes internally
-  updatePassword: (id, pass, cb) => {
-    bcrypt.hash(pass, 10, (err, hash) => {
-      if (err) return cb(err);
-      usersDao.updatePassword(id, hash, cb);
-    });
-  },
   // Update profile general info (wrap DAO)
   update: (userId, first_name, last_name, email, active, cb) => usersDao.update(userId, first_name, last_name, email, active, cb)
 };
