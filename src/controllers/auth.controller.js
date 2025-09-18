@@ -2,7 +2,6 @@
 const usersService = require('../services/users.service');
 const authService = require('../services/auth.service');
 const addressService = require('../services/address.service');
-const logger = require('../util/logger');
 
 const authController = {
   // Toon de loginpagina
@@ -14,7 +13,6 @@ const authController = {
   showRegister: (req, res) => {
     addressService.getAll((err, results) => {
       if (err) {
-        logger.error('Error fetching addresses for register:', err);
         return res.render('auth/register', { title: 'Registreren', addresses: [], stores: res.locals.stores || [] });
       }
       res.render('auth/register', { title: 'Registreren', addresses: results, stores: res.locals.stores || [] });
@@ -55,7 +53,6 @@ const authController = {
       const newUser = { first_name, last_name, email, password, store_id: parseInt(store_id) || 1, address_id: parseInt(address_id) || 1 };
       usersService.create(newUser, (err, newUserId) => {
         if (err) {
-          logger.error('usersDao.create error:', err);
           req.flash('error', 'Registratie mislukt.');
           return res.redirect('/auth/register');
         }

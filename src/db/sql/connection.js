@@ -1,6 +1,6 @@
 const mysql = require('mysql2');
-require('dotenv').config();
-const logger = require('../../util/logger');
+// Load environment variables silently
+require('dotenv').config({ debug: false });
 
 const database = mysql.createConnection({
   host: process.env.DB_HOST,
@@ -12,7 +12,7 @@ const database = mysql.createConnection({
 
 database.connect((err) => {
   if (err) {
-    logger.error('Database connection failed:', err.stack);
+    // Silent failure: do not log per user request
     return;
   }
   // Verbonden met database
