@@ -1,5 +1,4 @@
 const database = require("../db/sql/connection");
-const logger = require('../util/logger');
 
 const usersDao = {
   // Verwijder een gebruiker alleen als er geen openstaande boekingen zijn
@@ -20,7 +19,6 @@ const usersDao = {
           [userId],
           (err1) => {
             if (err1) {
-              logger.error('DELETE payment error:', err1);
               return callback(err1);
             }
             database.query(
@@ -28,7 +26,6 @@ const usersDao = {
               [userId],
               (err2) => {
                 if (err2) {
-                  logger.error('DELETE rental error:', err2);
                   return callback(err2);
                 }
                 database.query(
@@ -36,12 +33,8 @@ const usersDao = {
                   [userId],
                   (error, delResults) => {
                     if (error) {
-                      const logger = require('../util/logger');
-                      logger.error('DELETE customer error:', error);
                       return callback(error);
                     }
-                    const logger = require('../util/logger');
-                    logger.info('DELETE customer resultaat:', delResults);
                     callback(null, delResults);
                   }
                 );

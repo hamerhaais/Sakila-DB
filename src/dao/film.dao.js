@@ -1,5 +1,4 @@
 const database = require("../db/sql/connection");
-const logger = require('../util/logger');
 
 const filmDao = {
   // Functie om alle films met hun genre op te halen
@@ -13,8 +12,6 @@ const filmDao = {
        ORDER BY film.title ASC;`,
       (error, results) => {
         if (error) {
-          const logger = require('../util/logger');
-          logger.error("Error in film.dao.js getAll:", error);
           return callback(error, undefined);
         }
         return callback(undefined, results);
@@ -33,8 +30,6 @@ const filmDao = {
       [filmId],
       (error, results) => {
         if (error) {
-          const logger = require('../util/logger');
-          logger.error("Error in film.dao.js getById:", error);
           return callback(error, undefined);
         }
         const film = results[0];
@@ -55,8 +50,6 @@ const filmDao = {
 
         database.query(availabilityQuery, [filmId], (err2, availResults) => {
           if (err2) {
-            const logger = require('../util/logger');
-            logger.error('Error availability query:', err2);
             return callback(err2, undefined);
           }
           // Map availability by store id
