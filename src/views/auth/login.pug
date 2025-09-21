@@ -1,0 +1,24 @@
+extends ../layout
+
+block content
+  .container.mt-5
+    .row.justify-content-center
+      .col-md-6
+        .card
+          .card-header
+            h3 Inloggen
+          .card-body
+            //- Toon foutmelding als die er is
+            if error
+              .alert.alert-danger= error
+
+            form(method="POST" action="/auth/login")
+              .mb-3
+                label(for="email").form-label Emailadres
+                input(type="email" name="email" id="email" required).form-control
+              .mb-3
+                label(for="password").form-label Wachtwoord
+                input(type="password" name="password" id="password" required).form-control
+              .d-flex.justify-content-between.align-items-center
+                button(type="submit").btn.btn-primary Log in
+                a.btn.btn-secondary(href="/auth/register") Registreren

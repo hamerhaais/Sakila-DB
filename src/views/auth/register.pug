@@ -1,0 +1,45 @@
+extends ../layout
+
+block content
+  .container.mt-5
+    .row.justify-content-center
+      .col-md-6
+        .card
+          .card-header
+            h3 Registreren
+          .card-body
+            if flash && flash.error && flash.error.length
+              .alert.alert-danger= flash.error[0]
+            form(method="POST" action="/auth/register")
+              .mb-3
+                label(for="first_name").form-label Voornaam
+                input(type="text" name="first_name" id="first_name" required).form-control
+              .mb-3
+                label(for="last_name").form-label Achternaam
+                input(type="text" name="last_name" id="last_name" required).form-control
+              .mb-3
+                label(for="email").form-label Emailadres
+                input(type="email" name="email" id="email" required).form-control
+              .mb-3
+                label(for="password").form-label Wachtwoord
+                input(type="password" name="password" id="password" required).form-control
+              .mb-3
+                label(for="store_id").form-label Kies winkel
+                if stores && stores.length
+                  select.form-select(name="store_id" id="store_id")
+                    each store in stores
+                      option(value=store.id)= store.name
+                else
+                  // Fallback: toon eenvoudige numerieke winkelkeuze
+                  select.form-select(name="store_id" id="store_id")
+                    option(value="1") Winkel 1
+                    option(value="2") Winkel 2
+              .mb-3
+                label(for="address_id").form-label Kies adres
+                if addresses && addresses.length
+                  select.form-select(name="address_id" id="address_id")
+                    each a in addresses
+                      option(value=a.address_id)= a.address + ' - ' + a.district
+                else
+                  input.form-control(type="text" name="address_manual" placeholder="Adres (optioneel)")
+              button(type="submit").btn.btn-primary Registreren

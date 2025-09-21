@@ -1,0 +1,42 @@
+extends layout
+
+block content
+  .container.mt-5
+    h1 Over deze applicatie
+    p Deze webapplicatie is gemaakt door Stan Braks als opdracht. Alles wat je hier ziet is custom gebouwd, overzichtelijk en functioneel.
+
+    h2 Eindgebruiker
+    p De primaire eindgebruiker is een gewone klant die eenvoudig en veilig films wil huren en zijn profiel wil beheren.
+
+    h2 Epics & User Stories
+
+    h3 Epic A: Account & Authenticatie
+    ul
+      li Als klant wil ik een account kunnen aanmaken zodat ik persoonlijke gegevens en huurgeschiedenis heb.
+      li Als klant wil ik veilig kunnen inloggen zodat alleen ik toegang heb tot mijn profiel en reserveringen.
+      li Als klant wil ik mijn account kunnen verwijderen zodat ik mijn persoonsgegevens kan laten verwijderen wanneer gewenst.
+
+    h3 Epic B: Film Browsen & Reservatie
+    ul
+      li Als klant wil ik het filmaanbod kunnen doorzoeken en filteren zodat ik snel films vind die mij interesseren.
+      li Als klant wil ik de details van een film kunnen bekijken (beschrijving, rating, lengte) zodat ik een geïnformeerde keuze kan maken.
+      li Als klant wil ik een reservering kunnen maken die een verhuurrecord aanmaakt en direct een zichtbare bevestiging (flash message) geeft, en die vervolgens in 'Mijn Huringen' verschijnt met de verhuurdatum.
+
+    h3 Epic C: Profiel & Huurbeheer
+    ul
+      li Als klant wil ik mijn persoonlijke gegevens kunnen bijwerken zodat mijn contact- en facturatiegegevens correct blijven.
+      li Als klant wil ik een overzicht van mijn lopende en eerder gemaakte verhuurtransacties zodat ik mijn geschiedenis kan bekijken.
+
+    h2 Acceptatiecriteria
+    ul
+      li Je kunt een account aanmaken met een geldig e-mailadres en wachtwoord. Duplicaten mogen niet werken.
+      li Na inloggen kun je beveiligde pagina's bezoeken. Als je sessie verloopt, moet je opnieuw inloggen.
+      li Je kunt je naam en e-mail aanpassen en de wijzigingen zie je direct in je profiel.
+      li Je kunt zoeken en filteren op filmtitel en genre. Resultaten tonen titel, genre, jaar en rating.
+      li De filmdetailpagina toont titel, beschrijving, rating, lengte, taal en of de film beschikbaar is.
+      li Als je reserveert, wordt er een verhuur aangemaakt, je ziet een bevestiging en de reservering staat in 'Mijn Huringen'.
+      li Je kunt een verhuur teruggeven via 'Mijn Huringen'. Dat zet de teruggeefdatum en je ziet een bevestiging.
+      li Gevoelige gegevens zoals wachtwoorden zijn gehasht en `.env` hoort niet in de repo.
+      li Alle pagina's worden server-side gerenderd met Pug-templates.
+
+    p Deze user-stories en acceptatiecriteria richten zich op de klant als eindgebruiker en geven duidelijke voorwaarden waaraan de applicatie moet voldoen.

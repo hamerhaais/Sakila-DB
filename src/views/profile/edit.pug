@@ -1,0 +1,23 @@
+extends ../layout
+
+block content
+
+  .container.mt-5
+    form(method="POST" action="/profile/delete" onsubmit="return confirm('Weet je zeker dat je je account wilt verwijderen? Dit kan niet ongedaan worden gemaakt!');")
+      button.btn.btn-danger.mt-3(type="submit") Verwijder mijn account
+    h1 Profiel Bewerken
+    if user
+      form(method="POST" action="/profile/edit")
+        .mb-3
+          label(for="first_name") Voornaam
+          input.form-control(type="text" name="first_name" id="first_name" required value=user.first_name)
+        .mb-3
+          label(for="last_name") Achternaam
+          input.form-control(type="text" name="last_name" id="last_name" required value=user.last_name)
+        .mb-3
+          label(for="email") Emailadres
+          input.form-control(type="email" name="email" id="email" required value=user.email)
+        // password change removed: password management is disabled in the UI
+        button.btn.btn-primary(type="submit") Opslaan
+    else
+      p Je bent niet ingelogd.

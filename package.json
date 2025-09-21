@@ -1,0 +1,35 @@
+{
+  "name": "project",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "start": "nodemon app.js",
+    "cy:run": "start-server-and-test start http://localhost:3000 cypress:run",
+    "cypress:run": "cypress run",
+    "cypress:open": "cypress open"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "connect-flash": "^0.1.1",
+    "cookie-parser": "^1.4.7",
+    "dotenv": "^17.2.2",
+    "express": "^5.1.0",
+    "express-session": "^1.18.2",
+    "http-errors": "^2.0.0",
+  "jsonwebtoken": "^9.0.2",
+  "morgan": "^1.10.1",
+    "mysql2": "^3.14.5",
+    "nodemon": "^3.1.10",
+    "pug": "^3.0.3"
+  },
+  "devDependencies": {
+    "chai": "^6.0.1",
+    "cypress": "^15.2.0",
+    "mocha": "^11.7.2",
+    "start-server-and-test": "^1.14.0"
+  }
+}

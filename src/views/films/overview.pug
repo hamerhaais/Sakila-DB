@@ -1,0 +1,42 @@
+extends ../layout
+
+block content
+  .container.mt-4
+    nav(aria-label="breadcrumb")
+      ol.breadcrumb
+        li.breadcrumb-item
+          a(href="/") Home
+        li.breadcrumb-item.active(aria-current="page") Films
+
+    h1 Overzicht van alle films
+    p Welkom op de filmpagina. Hieronder vind je een lijst van alle beschikbare films.
+    form(method="GET" action="/films" class="mb-4 row g-2 align-items-center")
+      .col-md-6.d-flex.align-items-center
+        input.form-control.me-2(type="text" name="q" placeholder="Zoek op titel..." value=q)
+        button.btn.btn-sm.btn-primary(type="submit") Zoek
+      .col-md-6
+        select.form-select(name="genre")
+          option(value="") Alle genres
+          each genre in genres
+            option(value=genre selected=(genre==selectedGenre))= genre
+
+    table.table.table-striped.table-hover
+      thead.table-dark
+        tr
+          th Titel
+          th Genre
+          th Jaar
+          th Rating
+          th Acties
+      tbody
+        each film in films
+            tr
+            td= film.title
+            td= film.genre
+            td= film.release_year
+            td= film.rating || '-'
+            td
+              a.btn.btn-primary.btn-sm.me-2(href=`/films/${film.film_id}/details`) Details
+              if user
+                form(method="POST" action=`/films/${film.film_id}/rent` style="display:inline;")
+                  button.btn.btn-success.btn-sm(type="submit") Reserveer
