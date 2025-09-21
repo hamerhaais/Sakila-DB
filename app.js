@@ -2,19 +2,15 @@
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
-
 var cookieParser = require('cookie-parser');
+var logger = require('morgan');
 var session = require('express-session');
 var flash = require('connect-flash');
 
-// Import routes
 var indexRouter = require('./src/routes/index.route');
-// const usersRouter = require('./src/routes/users.route'); // Oude code, niet nodig
-// const addressRouter = require("./src/routes/address.route"); // Oude code, niet nodig
-const filmRouter = require("./src/routes/film.route");
-const authRouter = require("./src/routes/auth.route");
-const profileRouter = require("./src/routes/profile.route");
-
+var filmsRouter = require('./src/routes/film.route');
+var authRouter = require('./src/routes/auth.route');
+var profileRouter = require('./src/routes/profile.route');
 
 var app = express();
 
@@ -22,105 +18,57 @@ var app = express();
 app.set('views', path.join(__dirname, 'src', 'views'));
 app.set('view engine', 'pug');
 
+app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(session({
-  secret: 'supergeheim',
-  resave: false,
-  saveUninitialized: false
-}));
-app.use(flash());
 app.use(express.static(path.join(__dirname, 'src', 'public')));
+app.use(flash());
 
-// Middleware om flash messages en user info aan alle views te geven
-const jwt = require('jsonwebtoken');
-const JWT_SECRET = process.env.JWT_SECRET || 'mijn-geheime-sleutel-voor-development';
-app.use(function(req, res, next) {
-  res.locals.flash = {
-    success: req.flash('success'),
-    error: req.flash('error')
-  };
-  // JWT uit cookie halen en decoden
-  const token = req.cookies.token;
-  if (token) {
-    jwt.verify(token, JWT_SECRET, (err, decoded) => {
-      if (!err && decoded) {
-        req.user = decoded;
-        res.locals.user = decoded;
-      } else {
-        res.locals.user = null;
-      }
-      next();
-    });
-  } else {
-    res.locals.user = null;
-    next();
-  }
-});
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET || 'secret_key-stan',
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      maxAge: 20 * 60 * 1000
+    }
+  })
+);
 
-// Lees central store-definities en maak beschikbaar in alle views
-const storesConfig = require('./src/config/stores');
-app.use(function(req, res, next) {
-  res.locals.stores = storesConfig;
-  // Maak een snelle lookup (id -> naam) beschikbaar voor templates
-  res.locals.storeMap = (storesConfig || []).reduce((map, s) => {
-    map[s.id] = s.name;
-    return map;
-  }, {});
+app.use(function (req, res, next) {
+  res.locals.user = req.session && req.session.user;
   next();
 });
 
-// view engine setup
-app.set('views', path.join(__dirname, 'src', 'views'));
-app.set('view engine', 'pug');
-
-
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(session({
-  secret: 'supergeheim',
-  resave: false,
-  saveUninitialized: false
-}));
-app.use(flash());
-app.use(express.static(path.join(__dirname, 'src', 'public')));
-
-// Activate routes
 app.use('/', indexRouter);
-// app.use('/users', usersRouter); // Oude code, niet nodig
-app.use('/films', filmRouter);
+app.use('/films', filmsRouter);
 app.use('/auth', authRouter);
 app.use('/profile', profileRouter);
-// app.use('/address', addressRouter); // Oude code, niet nodig
 
 // catch 404 and forward to error handler
-
-// Custom 404 handler
-app.use(function(req, res, next) {
-  res.status(404);
-  res.render('error/404', { title: '404 - Niet gevonden' });
+app.use(function (req, res, next) {
+  next(createError(404));
 });
 
 // error handler
-
-
-// Custom 500 handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
+  // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
+  // render the error page
   res.status(err.status || 500);
-  res.render('error/500', { title: '500 - Serverfout' });
+  if (err.status === 404) return res.render('error/404', { title: '404 - Niet gevonden' });
+  return res.render('error/500', { title: '500 - Serverfout' });
 });
-
-// --- NIEUW GEDEELTE: START DE SERVER ---
-const port = process.env.PORT || 3000;
-app.listen(port, () => {
-  // Server gestart
-});
-// --- EINDE NIEUW GEDEELTE ---
-
 
 module.exports = app;
+
+// Start server when run directly (keeps nodemon running)
+if (require.main === module) {
+  const port = process.env.PORT || 3000;
+  app.listen(port, () => {
+    console.log(`Server listening on http://localhost:${port}`);
+  });
+}
 
